@@ -1,5 +1,6 @@
 import colors from "@/colors";
 import { useDB } from "@/context";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Alert } from "react-native";
 import styled from "styled-components/native";
@@ -59,6 +60,7 @@ const emotions = ["🤯", "🥲", "🤬", "🤗", "🥰", "😊", "🤩"];
 
 const Write = () => {
   const realm = useDB();
+  const router = useRouter();
   const [selectedEmotion, setEmotion] = useState<string | null>(null);
   const [feelings, setFeelings] = useState("");
   const onChangeText = (text: string) => setFeelings(text);
@@ -67,7 +69,15 @@ const Write = () => {
     if (feelings === "" || selectedEmotion == null) {
       return Alert.alert("Please complete form.");
     }
-    console.log(feelings);
+    realm.write(() => {
+      const feeling = realm.create("Feeling", {
+        _id: Date.now(),
+        emotion: selectedEmotion,
+        message: feelings,
+      });
+      console.log(feeling)
+      router.push("/");
+    });
   };
 
   return (

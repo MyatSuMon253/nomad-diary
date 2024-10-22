@@ -18,3 +18,15 @@ web-build/
 
 expo-env.d.ts
 # @end expo-cli
+
+*.xml
+*.png
+*.gradle
+*.bat
+*.properties
+*.keystore
+*.pro
+*.kt
+*.kts
+*.jar
+gradlew
