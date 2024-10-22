@@ -3,7 +3,7 @@ import { useDB } from "@/context";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
-import { FlatList, TouchableOpacity } from "react-native";
+import { FlatList, LayoutAnimation, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 
 const View = styled.View`
@@ -54,15 +54,21 @@ const Separator = styled.View`
 const Home = () => {
   const realm = useDB();
   const [feelings, setFeelings] = useState([]);
-  const onPress = (id: number) => {};
+  const onDelete = (id: number) => {
+    realm.write(() => {
+      const feeling = realm.objectForPrimaryKey("Feeling", id);
+      realm.delete(feeling);
+    });
+  };
 
   useEffect(() => {
     const feelings = realm.objects("Feeling");
     setFeelings(feelings);
 
-    feelings.addListener(() => {
-      const feelings = realm.objects("Feeling");
-      setFeelings(feelings);
+    feelings.addListener((feelings, changes) => {
+      // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+      LayoutAnimation.spring();
+      setFeelings(feelings.sorted("_id", true));
     });
 
     return () => {
@@ -80,7 +86,7 @@ const Home = () => {
         ItemSeparatorComponent={Separator}
         keyExtractor={(feeling: any) => feeling._id + ""}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => onPress(item._id)}>
+          <TouchableOpacity onPress={() => onDelete(item._id)}>
             <Record>
               <Emotion>{item.emotion}</Emotion>
               <Message>{item.message}</Message>
