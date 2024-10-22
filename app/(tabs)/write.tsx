@@ -67,6 +67,7 @@ const Write = () => {
     }
     console.log(feelings);
   };
+
   return (
     <View>
       <Title>How do you feel now?</Title>

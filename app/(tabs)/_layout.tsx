@@ -5,6 +5,8 @@ import { SplashScreen, Tabs } from "expo-router";
 import { useEffect, useState } from "react";
 import Realm from "realm";
 
+SplashScreen.preventAutoHideAsync();
+
 const FeelingSchema = {
   name: "Feeling",
   properties: {
@@ -14,8 +16,6 @@ const FeelingSchema = {
   },
   primaryKey: "_id",
 };
-
-SplashScreen.preventAutoHideAsync();
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
