@@ -1,7 +1,8 @@
 import colors from "@/colors";
+import { useDB } from "@/context";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FlatList, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 
@@ -51,8 +52,23 @@ const Separator = styled.View`
 `;
 
 const Home = () => {
+  const realm = useDB();
   const [feelings, setFeelings] = useState([]);
   const onPress = (id: number) => {};
+
+  useEffect(() => {
+    const feelings = realm.objects("Feeling");
+    setFeelings(feelings);
+
+    feelings.addListener(() => {
+      const feelings = realm.objects("Feeling");
+      setFeelings(feelings);
+    });
+
+    return () => {
+      feelings.removeAllListeners();
+    };
+  }, []);
 
   return (
     <View>
