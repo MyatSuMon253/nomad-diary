@@ -1,4 +1,5 @@
 import colors from "@/colors";
+import { useDB } from "@/context";
 import React, { useState } from "react";
 import { Alert } from "react-native";
 import styled from "styled-components/native";
@@ -57,6 +58,7 @@ const EmotionText = styled.Text`
 const emotions = ["🤯", "🥲", "🤬", "🤗", "🥰", "😊", "🤩"];
 
 const Write = () => {
+  const realm = useDB();
   const [selectedEmotion, setEmotion] = useState<string | null>(null);
   const [feelings, setFeelings] = useState("");
   const onChangeText = (text: string) => setFeelings(text);

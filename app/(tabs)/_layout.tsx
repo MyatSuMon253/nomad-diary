@@ -1,5 +1,6 @@
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
+import { DBContext } from "@/context";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { SplashScreen, Tabs } from "expo-router";
 import { useEffect, useState } from "react";
@@ -41,36 +42,38 @@ export default function TabLayout() {
   }
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        headerShown: false,
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: "Home",
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "home" : "home-outline"}
-              color={color}
-            />
-          ),
+    <DBContext.Provider value={realm}>
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+          headerShown: false,
         }}
-      />
-      <Tabs.Screen
-        name="write"
-        options={{
-          title: "Write",
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "code-slash" : "code-slash-outline"}
-              color={color}
-            />
-          ),
-        }}
-      />
-    </Tabs>
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: "Home",
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                name={focused ? "home" : "home-outline"}
+                color={color}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="write"
+          options={{
+            title: "Write",
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                name={focused ? "code-slash" : "code-slash-outline"}
+                color={color}
+              />
+            ),
+          }}
+        />
+      </Tabs>
+    </DBContext.Provider>
   );
 }
